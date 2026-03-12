@@ -3,19 +3,21 @@ package com.stolengalaxy.sudoku_solver.grid;
 import java.util.ArrayList;
 
 public class Grid {
-    ArrayList<ArrayList<Integer>> rows = new ArrayList<>();
+    private ArrayList<ArrayList<Integer>> rows = new ArrayList<>();
+    int size;
 
     public Grid(ArrayList<ArrayList<Integer>> rows){
         this.rows = rows;
+        this.size = rows.size();
     }
 
     public ArrayList<ArrayList<Integer>> columns(){
         ArrayList<ArrayList<Integer>> columns = new ArrayList<>();
 
-        for (int columnIndex = 1; columnIndex <= 9; columnIndex++){
+        for (int columnIndex = 0; columnIndex < size; columnIndex++){
             ArrayList<Integer> column = new ArrayList<>();
 
-            for (int rowIndex = 1; rowIndex <= 9; rowIndex++){
+            for (int rowIndex = 0; rowIndex < size; rowIndex++){
                 int value = rows.get(rowIndex).get(columnIndex);
                 column.add(value);
             }
@@ -23,5 +25,9 @@ public class Grid {
         }
 
         return columns;
+    }
+
+    public ArrayList<ArrayList<Integer>> rows(){
+        return rows;
     }
 }
