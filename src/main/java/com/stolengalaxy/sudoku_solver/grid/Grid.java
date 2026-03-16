@@ -30,4 +30,16 @@ public class Grid {
     public ArrayList<ArrayList<Integer>> rows(){
         return rows;
     }
+
+    public String toString(){
+        StringBuilder printableGrid = new StringBuilder();
+        for(ArrayList<Integer> row:this.rows){
+            StringBuilder printableRow = new StringBuilder();
+            for(Integer value:row){
+                printableRow.append(value).append("  ");
+            }
+            printableGrid.append(printableRow).append("\n");
+        }
+        return printableGrid.toString().strip();
+    }
 }
