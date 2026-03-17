@@ -15,4 +15,28 @@ public class Validation {
         }
         return stillValid;
     }
+
+    public static boolean isGridValid(Grid grid){
+        boolean stillValid = true;
+
+        for(ArrayList<Integer> row:grid.rows()){
+            if(!isSetValid(row)){
+                stillValid = false;
+                break;
+            }
+        }
+        for(ArrayList<Integer> column:grid.columns()){
+            if(!isSetValid(column)){
+                stillValid = false;
+                break;
+            }
+        }
+        for(ArrayList<Integer> block:grid.blocks()){
+            if(!isSetValid(block)){
+                stillValid = false;
+                break;
+            }
+        }
+        return stillValid;
+    }
 }
