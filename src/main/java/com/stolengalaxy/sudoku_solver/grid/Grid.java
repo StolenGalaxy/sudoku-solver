@@ -77,6 +77,12 @@ public class Grid {
         return blocks;
     }
 
+    public Grid setCell(int row, int column, int newValue){
+        Grid modifiedGrid = this;
+        modifiedGrid.rows.get(row).set(column, newValue);
+        return modifiedGrid;
+    }
+
     public String toString(){
         StringBuilder printableGrid = new StringBuilder();
         for(ArrayList<Integer> row:this.rows){

@@ -1,31 +1,29 @@
 package com.stolengalaxy.sudoku_solver.solver;
 
+import com.stolengalaxy.sudoku_solver.cell.DynamicCell;
 import com.stolengalaxy.sudoku_solver.grid.Grid;
+import com.stolengalaxy.sudoku_solver.grid.Validation;
 
 import java.util.ArrayList;
 
 public class DFS {
-    private static ArrayList<EmptyCell> getEmptyCells(Grid grid){
-        ArrayList<EmptyCell> emptyCells = new ArrayList<>();
+    private static ArrayList<DynamicCell> getEmptyCells(Grid grid){
+        ArrayList<DynamicCell> dynamicCells = new ArrayList<>();
         ArrayList<ArrayList<Integer>> rows = grid.rows();
         for(int rowIndex = 0; rowIndex < rows.size(); rowIndex++){
             ArrayList<Integer> row = rows.get(rowIndex);
             for(int columnIndex = 0; columnIndex < rows.size(); columnIndex++){
                 int value = row.get(columnIndex);
                 if(value == 0){
-                    emptyCells.add(new EmptyCell(rowIndex, columnIndex));
+                    dynamicCells.add(new DynamicCell(rowIndex, columnIndex));
                 }
             }
         }
-        return emptyCells;
+        return dynamicCells;
     }
 
     public static Grid complete(Grid grid){
-        ArrayList<EmptyCell> emptyCells = getEmptyCells(grid);
-
-        emptyCells.forEach(emptyCell -> {
-            System.out.println("Empty cell at (" + emptyCell.row + ", " + emptyCell.column + ")");
-        });
+        ArrayList<DynamicCell> dynamicCells = getEmptyCells(grid);
 
         return new Grid(new ArrayList<>());
     }
