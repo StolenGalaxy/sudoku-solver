@@ -44,10 +44,6 @@ public class Grid {
     public ArrayList<ArrayList<Integer>> blocks(){
         ArrayList<ArrayList<Integer>> blocks = new ArrayList<>();
 
-        // initialise the blocks
-        for(int i = 1; i <= size; i++){
-            blocks.add(new ArrayList<>());
-        }
 
 
         // first we want to split the grid into 3 (or more depending on size) "block columns" (each 3 (or more) cell wide)
@@ -66,8 +62,38 @@ public class Grid {
         });
         blockColumns.add(newBlockColumn);
         //--------------------------------------------------------------------
+        
+        while(blocks.size() < size){
+            // initialise blocks subset
+            ArrayList<ArrayList<Integer>> blocksSubset = new ArrayList<>();
 
+            for(int i = 1; i <= Math.pow(size, 0.5); i++){
+                blocksSubset.add(new ArrayList<>());
+            }
+            //while the length of the final block in the sub-blocks is less than 9 (or greater if non-standard)
+            while(blocksSubset.get((int) Math.pow(size, 0.5) - 1).size() < size){
+                if(blockColumns.isEmpty()){
+                    break;
+                }
 
+                int nextBlockToAddTo = ArrayTools.nextSmallestArrayIndex(blocksSubset);
+
+                // add the next 3 (or more if non-standard) cells to the next lowest size block them remove them from blockColumns
+                ArrayList<Integer> block = blocksSubset.get(nextBlockToAddTo);
+                for(int i = 0; i < Math.pow(size, 0.5); i++){
+                    if(blockColumns.getFirst().isEmpty()){
+                        blockColumns.removeFirst();
+                        break;
+                    }
+                    block.add(blockColumns.getFirst().getFirst());
+                    blockColumns.getFirst().removeFirst();
+
+                    blocksSubset.set(nextBlockToAddTo, block);
+                }
+            }
+            blocks.addAll(blocksSubset);
+            blocksSubset.clear();
+        }
 
         return blocks;
     }
