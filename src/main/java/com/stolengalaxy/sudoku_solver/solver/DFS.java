@@ -1,5 +1,6 @@
 package com.stolengalaxy.sudoku_solver.solver;
 
+import com.stolengalaxy.sudoku_solver.cell.CellTools;
 import com.stolengalaxy.sudoku_solver.cell.DynamicCell;
 import com.stolengalaxy.sudoku_solver.grid.Grid;
 import com.stolengalaxy.sudoku_solver.grid.Validation;
@@ -24,6 +25,30 @@ public class DFS {
 
     public static Grid complete(Grid grid){
         ArrayList<DynamicCell> dynamicCells = getEmptyCells(grid);
+        Grid modifiedGrid = grid;
+
+        while(!Validation.isGridComplete(grid)){
+            while(!Validation.isGridValid(grid)){
+                System.out.println("grid no longer valid-------\n");
+                System.out.println(grid);
+            }
+            int firstEmptyIndex = CellTools.getFirstEmptyCellIndex(grid, dynamicCells);
+
+            // increment the first dynamic cell before the first empty cell by 1
+
+            DynamicCell cell;
+            if(firstEmptyIndex == 0){
+                cell = dynamicCells.get(firstEmptyIndex);
+            } else{
+                cell = dynamicCells.get(firstEmptyIndex - 1);
+            }
+
+
+            int currentValue = CellTools.getCellValue(grid, cell);
+            modifiedGrid = modifiedGrid.setCell(cell, currentValue + 1);
+
+            break;
+        }
 
         return new Grid(new ArrayList<>());
     }
