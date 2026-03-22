@@ -1,5 +1,8 @@
 package com.stolengalaxy.sudoku_solver.grid;
 
+import com.stolengalaxy.sudoku_solver.cell.DynamicCell;
+import com.stolengalaxy.sudoku_solver.util.ArrayTools;
+
 import java.util.ArrayList;
 
 public class Grid {
@@ -77,9 +80,9 @@ public class Grid {
         return blocks;
     }
 
-    public Grid setCell(int row, int column, int newValue){
+    public Grid setCell(DynamicCell cell, int newValue){
         Grid modifiedGrid = this;
-        modifiedGrid.rows.get(row).set(column, newValue);
+        modifiedGrid.rows.get(cell.row).set(cell.column, newValue);
         return modifiedGrid;
     }
 
@@ -93,5 +96,15 @@ public class Grid {
             printableGrid.append(printableRow).append("\n");
         }
         return printableGrid.toString().strip();
+    }
+
+    public ArrayList<Integer> values(){
+        ArrayList<Integer> allValues = new ArrayList<>();
+        this.rows.forEach(allValues::addAll);
+        return allValues;
+    }
+
+    public ArrayList<Integer> validValues(){
+        return ArrayTools.orderedIntegerArray(this.size);
     }
 }
