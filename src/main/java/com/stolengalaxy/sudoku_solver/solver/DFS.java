@@ -27,29 +27,27 @@ public class DFS {
         ArrayList<DynamicCell> dynamicCells = getEmptyCells(grid);
         Grid modifiedGrid = grid;
 
+        int cellToModifyIndex = CellTools.getFirstEmptyCellIndex(modifiedGrid, dynamicCells);
         while(!Validation.isGridComplete(grid)){
-            while(!Validation.isGridValid(grid)){
-                System.out.println("grid no longer valid-------\n");
-                System.out.println(grid);
-            }
-            int firstEmptyIndex = CellTools.getFirstEmptyCellIndex(grid, dynamicCells);
-
             // increment the first dynamic cell before the first empty cell by 1
-
-            DynamicCell cell;
-            if(firstEmptyIndex == 0){
-                cell = dynamicCells.get(firstEmptyIndex);
-            } else{
-                cell = dynamicCells.get(firstEmptyIndex - 1);
-            }
-
+            DynamicCell cell = dynamicCells.get(cellToModifyIndex);
 
             int currentValue = CellTools.getCellValue(grid, cell);
-            modifiedGrid = modifiedGrid.setCell(cell, currentValue + 1);
+            if(currentValue < grid.size){
+                modifiedGrid = modifiedGrid.setCell(cell, currentValue + 1);
+            } else{
+                cellToModifyIndex--;
+                modifiedGrid = modifiedGrid.setCell(cell, 0);
 
-            break;
+                DynamicCell previousCell = dynamicCells.get(cellToModifyIndex);
+                modifiedGrid = modifiedGrid.setCell(previousCell, CellTools.getCellValue(modifiedGrid, previousCell) + 1);
+            }
+
+            if(Validation.isGridValid(grid)){
+                cellToModifyIndex++;
+            }
         }
 
-        return new Grid(new ArrayList<>());
+        return modifiedGrid;
     }
 }

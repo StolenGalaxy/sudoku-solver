@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Grid {
     private ArrayList<ArrayList<Integer>> rows = new ArrayList<>();
-    int size;
+    public int size;
     int blockSize;
 
     public Grid(ArrayList<ArrayList<Integer>> rows){
@@ -43,7 +43,7 @@ public class Grid {
 
     public ArrayList<ArrayList<Integer>> blocks(){
         ArrayList<ArrayList<Integer>> blocks = new ArrayList<>();
-        for(int i = 1; i <= 9; i++){
+        for(int i = 1; i <= size; i++){
             blocks.add(new ArrayList<>());
         }
 
@@ -57,7 +57,7 @@ public class Grid {
                 for(int i = 1; i <= blockSize; i++){
                     int targetBlockIndex;
 
-                    //TODO: only works for 9x9 sudoku
+                    //TODO: currently only works for 9x9 sudoku
                     if(rowCount <= blockSize){
                         targetBlockIndex = horizontalBlockIndex - 1;
                     } else if (rowCount <= 2 * blockSize) {
