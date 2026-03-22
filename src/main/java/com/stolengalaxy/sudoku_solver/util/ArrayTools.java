@@ -46,4 +46,20 @@ public class ArrayTools {
         }
         return array;
     }
+
+    public static int nextSmallestArrayIndex (ArrayList<ArrayList<Integer>> arrays){
+        // returns the index of the next smallest array in a list of arrays
+
+        int index = 0;
+        int lowestSize = arrays.getFirst().size();
+
+        for(int i = 0; i<arrays.size(); i++){
+            if(arrays.get(i).size() < lowestSize){
+                lowestSize = arrays.get(i).size();
+                index = i;
+            }
+        }
+
+        return index;
+    }
 }
