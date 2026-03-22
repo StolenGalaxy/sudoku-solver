@@ -43,40 +43,32 @@ public class Grid {
 
     public ArrayList<ArrayList<Integer>> blocks(){
         ArrayList<ArrayList<Integer>> blocks = new ArrayList<>();
+
+        // initialise the blocks
         for(int i = 1; i <= size; i++){
             blocks.add(new ArrayList<>());
         }
 
-        int rowCount = 0;
-        for(ArrayList<Integer> row:rows){
-            rowCount++;
-            int fromColumn = 0;
 
-            // split the row into 3 (if a standard 9x9 sudoku) sections
-            for(int horizontalBlockIndex = 1; horizontalBlockIndex <= blockSize; horizontalBlockIndex++){
-                for(int i = 1; i <= blockSize; i++){
-                    int targetBlockIndex;
+        // first we want to split the grid into 3 (or more depending on size) "block columns" (each 3 (or more) cell wide)
+        //--------------------------------------------------------------------
+        ArrayList<ArrayList<Integer>> blockColumns = new ArrayList<>();
 
-                    //TODO: currently only works for 9x9 sudoku
-                    if(rowCount <= blockSize){
-                        targetBlockIndex = horizontalBlockIndex - 1;
-                    } else if (rowCount <= 2 * blockSize) {
-                        targetBlockIndex = horizontalBlockIndex + blockSize - 1;
-                    } else if (rowCount <= 3 * blockSize) {
-                        targetBlockIndex = horizontalBlockIndex + 2 * blockSize - 1;
-                    } else{
-                        throw new RuntimeException("Non-standard sudoku not supported.");
-                    }
-                    ArrayList<Integer> currentBlock = blocks.get(targetBlockIndex);
-
-                    currentBlock.add(row.get(fromColumn));
-                    blocks.set(targetBlockIndex, currentBlock);
-                    fromColumn++;
-
-                }
-
+        ArrayList<Integer> newBlockColumn = new ArrayList<>();
+        columns().forEach(column -> {
+            if(newBlockColumn.size() < size * Math.pow(size, 0.5)){
+                newBlockColumn.addAll(column);
+            } else{
+                blockColumns.add(new ArrayList<>(newBlockColumn));
+                newBlockColumn.clear();
+                newBlockColumn.addAll(column);
             }
-        }
+        });
+        blockColumns.add(newBlockColumn);
+        //--------------------------------------------------------------------
+
+
+
         return blocks;
     }
 
