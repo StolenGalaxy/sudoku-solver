@@ -6,7 +6,7 @@ import com.stolengalaxy.sudoku_solver.solver.DFS;
 
 public class Main {
     static void main() {
-        Grid emptyGrid = Generator.emptyGrid(16);
+        Grid emptyGrid = Generator.emptyGrid(9);
         System.out.println(DFS.complete(emptyGrid));
     }
 }
