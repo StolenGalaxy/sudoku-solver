@@ -2,8 +2,8 @@ plugins {
     id("java")
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group = "com.stolengalaxy"
+version = "1.0"
 
 repositories {
     mavenCentral()
