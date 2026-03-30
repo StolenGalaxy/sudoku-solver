@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Grid {
     private ArrayList<ArrayList<Integer>> rows = new ArrayList<>();
     public int size;
-    int blockSize;
+    public int blockSize;
 
     public Grid(ArrayList<ArrayList<Integer>> rows){
         this.rows = rows;
@@ -45,8 +45,7 @@ public class Grid {
         ArrayList<ArrayList<Integer>> blocks = new ArrayList<>();
 
 
-
-        // first we want to split the grid into 3 (or more depending on size) "block columns" (each 3 (or more) cell wide)
+        // first we want to split the grid into 3 (or more depending on size - sqrt(size)) "block columns" (each 3 (or more) cell wide)
         //--------------------------------------------------------------------
         ArrayList<ArrayList<Integer>> blockColumns = new ArrayList<>();
 
@@ -62,7 +61,7 @@ public class Grid {
         });
         blockColumns.add(newBlockColumn);
         //--------------------------------------------------------------------
-        
+
         while(blocks.size() < size){
             // initialise blocks subset
             ArrayList<ArrayList<Integer>> blocksSubset = new ArrayList<>();
@@ -78,7 +77,7 @@ public class Grid {
 
                 int nextBlockToAddTo = ArrayTools.nextSmallestArrayIndex(blocksSubset);
 
-                // add the next 3 (or more if non-standard) cells to the next lowest size block them remove them from blockColumns
+                // add the next 3 (or more if non-standard) cells to the next lowest size block then remove them from blockColumns
                 ArrayList<Integer> block = blocksSubset.get(nextBlockToAddTo);
                 for(int i = 0; i < Math.pow(size, 0.5); i++){
                     if(blockColumns.getFirst().isEmpty()){
@@ -124,5 +123,9 @@ public class Grid {
 
     public ArrayList<Integer> validValues(){
         return ArrayTools.orderedIntegerArray(this.size);
+    }
+
+    public ArrayList<Integer> getPossibleCellValues(DynamicCell cell){
+        return new ArrayList<>();
     }
 }
