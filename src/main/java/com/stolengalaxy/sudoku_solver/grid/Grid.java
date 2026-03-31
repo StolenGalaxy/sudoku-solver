@@ -75,7 +75,6 @@ public class Grid {
                 if(blockColumns.isEmpty()){
                     break;
                 }
-
                 int nextBlockToAddTo = CellTools.nextSmallestArrayIndex(blocksSubset);
 
                 // add the next 3 (or more if non-standard) cells to the next lowest size block then remove them from blockColumns
@@ -91,10 +90,17 @@ public class Grid {
                     blocksSubset.set(nextBlockToAddTo, block);
                 }
             }
-            blocks.addAll(blocksSubset);
+
+            for(ArrayList<Cell> block:blocksSubset){
+                int blockIndex = blocks.size();
+
+                for(Cell cell:block){
+                    cell.block = blockIndex;
+                }
+                blocks.add(block);
+            }
             blocksSubset.clear();
         }
-
         return blocks;
     }
 
