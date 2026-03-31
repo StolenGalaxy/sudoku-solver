@@ -1,22 +1,25 @@
 package com.stolengalaxy.sudoku_solver.grid;
 
+import com.stolengalaxy.sudoku_solver.cell.Cell;
+import com.stolengalaxy.sudoku_solver.cell.CellTools;
 import com.stolengalaxy.sudoku_solver.util.ArrayTools;
 
 import java.util.ArrayList;
 
 public class Validation {
-    public static boolean isSetValid(ArrayList<Integer> values, ArrayList<Integer> validValues){
+    public static boolean isSetValid(ArrayList<Cell> cells, ArrayList<Integer> validValues){
         boolean stillValid = true;
 
-        for(int value:values){
-            if(value == 0){
+        for(Cell cell:cells){
+            if(cell.value == 0){
                 break;
             }
-            if(!validValues.contains(value)){
+            if(!validValues.contains(cell.value)){
                 stillValid = false;
                 break;
             }
-            if (ArrayTools.countIntegerOccurrences(values, value) > 1){
+            ArrayList<Integer> values = CellTools.toIntegerRow(cells);
+            if (ArrayTools.countIntegerOccurrences(values, cell.value) > 1){
                 stillValid = false;
                 break;
             }
@@ -27,19 +30,19 @@ public class Validation {
     public static boolean isGridValid(Grid grid){
         boolean stillValid = true;
 
-        for(ArrayList<Integer> row:grid.rows()){
+        for(ArrayList<Cell> row:grid.rows()){
             if(!isSetValid(row, grid.validValues())){
                 stillValid = false;
                 break;
             }
         }
-        for(ArrayList<Integer> column:grid.columns()){
+        for(ArrayList<Cell> column:grid.columns()){
             if(!isSetValid(column, grid.validValues())){
                 stillValid = false;
                 break;
             }
         }
-        for(ArrayList<Integer> block:grid.blocks()){
+        for(ArrayList<Cell> block:grid.blocks()){
             if(!isSetValid(block, grid.validValues())){
                 stillValid = false;
                 break;
@@ -49,6 +52,7 @@ public class Validation {
     }
 
     public static boolean isGridComplete(Grid grid){
-        return !grid.values().contains(0) && isGridValid(grid);
+        ArrayList<Integer> values = CellTools.toIntegerRow(grid.cells());
+        return !values.contains(0) && isGridValid(grid);
     }
 }

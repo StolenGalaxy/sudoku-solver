@@ -18,10 +18,22 @@ public class CellTools {
         ArrayList<Cell> cellRow = new ArrayList<>();
 
         for(int i = 0; i < integerArray.size(); i++){
-            Cell newCell = new Cell(i, integerArray.get(i));
+            Cell newCell = new Cell(i);
+
+            newCell.column = i;
             cellRow.add(newCell);
         }
         return cellRow;
+    }
+
+    public static ArrayList<Integer> toIntegerRow(ArrayList<Cell> cellArray){
+        ArrayList<Integer> values = new ArrayList<>();
+
+        cellArray.forEach(cell -> {
+            values.add(cell.value);
+        });
+
+        return values;
     }
 
     public static int nextSmallestArrayIndex (ArrayList<ArrayList<Cell>> arrays){
@@ -41,13 +53,13 @@ public class CellTools {
     }
 
 
-    private static ArrayList<Integer> getCellRow(Grid grid, Cell cell){
+    private static ArrayList<Cell> getCellRow(Grid grid, Cell cell){
         return grid.rows().get(cell.row);
     }
-    private static ArrayList<Integer> getCellColumn(Grid grid, Cell cell){
+    private static ArrayList<Cell> getCellColumn(Grid grid, Cell cell){
         return grid.columns().get(cell.column);
     }
-    private static ArrayList<Integer> getCellBlock(Grid grid, Cell cell){
+    private static ArrayList<Cell> getCellBlock(Grid grid, Cell cell){
         //TODO: IMPLEMENT
         return new ArrayList<>();
     }

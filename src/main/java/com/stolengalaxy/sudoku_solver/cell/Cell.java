@@ -1,14 +1,13 @@
 package com.stolengalaxy.sudoku_solver.cell;
 
 public class Cell {
-    public int row;
     public int value;
 
+    public int row;
     public int block;
     public int column;
 
-    public Cell(int row, int value){
-        this.row = row;
+    public Cell(int value){
         this.value = value;
     }
 }

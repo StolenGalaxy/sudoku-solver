@@ -1,16 +1,17 @@
 package com.stolengalaxy.sudoku_solver.grid;
 
-import com.stolengalaxy.sudoku_solver.cell.DynamicCell;
+import com.stolengalaxy.sudoku_solver.cell.Cell;
+import com.stolengalaxy.sudoku_solver.cell.CellTools;
 import com.stolengalaxy.sudoku_solver.util.ArrayTools;
 
 import java.util.ArrayList;
 
 public class Grid {
-    private ArrayList<ArrayList<Integer>> rows = new ArrayList<>();
+    private ArrayList<ArrayList<Cell>> rows = new ArrayList<>();
     public int size;
     public int blockSize;
 
-    public Grid(ArrayList<ArrayList<Integer>> rows){
+    public Grid(ArrayList<ArrayList<Cell>> rows){
         this.rows = rows;
         this.size = rows.size();
         double lengthRoot = Math.sqrt(this.size);
@@ -21,15 +22,13 @@ public class Grid {
         }
     }
 
-    public ArrayList<ArrayList<Integer>> columns(){
-        ArrayList<ArrayList<Integer>> columns = new ArrayList<>();
+    public ArrayList<ArrayList<Cell>> columns(){
+        ArrayList<ArrayList<Cell>> columns = new ArrayList<>();
 
         for (int columnIndex = 0; columnIndex < size; columnIndex++){
-            ArrayList<Integer> column = new ArrayList<>();
-
+            ArrayList<Cell> column = new ArrayList<>();
             for (int rowIndex = 0; rowIndex < size; rowIndex++){
-                int value = rows.get(rowIndex).get(columnIndex);
-                column.add(value);
+                column.add(this.rows.get(rowIndex).get(columnIndex));
             }
             columns.add(column);
         }
@@ -37,19 +36,19 @@ public class Grid {
         return columns;
     }
 
-    public ArrayList<ArrayList<Integer>> rows(){
+    public ArrayList<ArrayList<Cell>> rows(){
         return rows;
     }
 
-    public ArrayList<ArrayList<Integer>> blocks(){
-        ArrayList<ArrayList<Integer>> blocks = new ArrayList<>();
+    public ArrayList<ArrayList<Cell>> blocks(){
+        ArrayList<ArrayList<Cell>> blocks = new ArrayList<>();
 
 
         // first we want to split the grid into 3 (or more depending on size - sqrt(size)) "block columns" (each 3 (or more) cell wide)
         //--------------------------------------------------------------------
-        ArrayList<ArrayList<Integer>> blockColumns = new ArrayList<>();
+        ArrayList<ArrayList<Cell>> blockColumns = new ArrayList<>();
 
-        ArrayList<Integer> newBlockColumn = new ArrayList<>();
+        ArrayList<Cell> newBlockColumn = new ArrayList<>();
         columns().forEach(column -> {
             if(newBlockColumn.size() < size * Math.pow(size, 0.5)){
                 newBlockColumn.addAll(column);
@@ -64,7 +63,7 @@ public class Grid {
 
         while(blocks.size() < size){
             // initialise blocks subset
-            ArrayList<ArrayList<Integer>> blocksSubset = new ArrayList<>();
+            ArrayList<ArrayList<Cell>> blocksSubset = new ArrayList<>();
 
             for(int i = 1; i <= Math.pow(size, 0.5); i++){
                 blocksSubset.add(new ArrayList<>());
@@ -75,10 +74,10 @@ public class Grid {
                     break;
                 }
 
-                int nextBlockToAddTo = ArrayTools.nextSmallestArrayIndex(blocksSubset);
+                int nextBlockToAddTo = CellTools.nextSmallestArrayIndex(blocksSubset);
 
                 // add the next 3 (or more if non-standard) cells to the next lowest size block then remove them from blockColumns
-                ArrayList<Integer> block = blocksSubset.get(nextBlockToAddTo);
+                ArrayList<Cell> block = blocksSubset.get(nextBlockToAddTo);
                 for(int i = 0; i < Math.pow(size, 0.5); i++){
                     if(blockColumns.getFirst().isEmpty()){
                         blockColumns.removeFirst();
@@ -97,35 +96,40 @@ public class Grid {
         return blocks;
     }
 
-    public Grid setCell(DynamicCell cell, int newValue){
+    public Grid setCell(Cell cell, int newValue){
         Grid modifiedGrid = this;
-        modifiedGrid.rows.get(cell.row).set(cell.column, newValue);
+
+        Cell newCell = new Cell(newValue);
+        newCell.column = cell.column;
+        newCell.block = cell.block;
+        System.out.println("changing " + modifiedGrid.rows.get(cell.row).get(cell.column).value + " to " + newValue);
+        modifiedGrid.rows.get(cell.row).set(cell.column, newCell);
         return modifiedGrid;
     }
 
     public String toString(){
         StringBuilder printableGrid = new StringBuilder();
-        for(ArrayList<Integer> row:this.rows){
+        for(ArrayList<Cell> row:this.rows){
             StringBuilder printableRow = new StringBuilder();
-            for(Integer value:row){
-                printableRow.append(value).append("  ");
+            for(Cell cell:row){
+                printableRow.append(cell.value).append("  ");
             }
             printableGrid.append(printableRow).append("\n");
         }
         return printableGrid.toString().strip();
     }
 
-    public ArrayList<Integer> values(){
-        ArrayList<Integer> allValues = new ArrayList<>();
-        this.rows.forEach(allValues::addAll);
-        return allValues;
+    public ArrayList<Cell> cells(){
+        ArrayList<Cell> allCells = new ArrayList<>();
+        this.rows.forEach(allCells::addAll);
+        return allCells;
     }
 
     public ArrayList<Integer> validValues(){
         return ArrayTools.orderedIntegerArray(this.size);
     }
 
-    public ArrayList<Integer> getPossibleCellValues(DynamicCell cell){
+    public ArrayList<Integer> getPossibleCellValues(Cell cell){
         return new ArrayList<>();
     }
 }
