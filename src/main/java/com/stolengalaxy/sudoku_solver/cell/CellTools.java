@@ -5,9 +5,9 @@ import com.stolengalaxy.sudoku_solver.grid.Grid;
 import java.util.ArrayList;
 
 public class CellTools {
-    public static int getFirstEmptyCellIndex(ArrayList<Cell> cellArray){
-        for(int i=0; i<cellArray.size(); i++){
-            if(cellArray.get(i).value == 0){
+    public static int getFirstEmptyCellIndex(Grid grid, ArrayList<Integer> indexes){
+        for(int i=0; i<indexes.size(); i++){
+            if(grid.cells().get(i).value  == 0){
                 return i;
             }
         }
@@ -48,10 +48,8 @@ public class CellTools {
                 index = i;
             }
         }
-
         return index;
     }
-
 
     private static ArrayList<Cell> getCellRow(Grid grid, Cell cell){
         return grid.rows().get(cell.row);
