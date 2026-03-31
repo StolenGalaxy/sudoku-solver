@@ -2,30 +2,63 @@ package com.stolengalaxy.sudoku_solver.cell;
 
 import com.stolengalaxy.sudoku_solver.grid.Grid;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class CellTools {
-    public static int getCellValue(Grid grid, DynamicCell cell){
-        return grid.rows().get(cell.row).get(cell.column);
-    }
-
-    public static int getFirstEmptyCellIndex(Grid grid, ArrayList<DynamicCell> cellArray){
-        for(int i=0; i<cellArray.size(); i++){
-            if(getCellValue(grid, cellArray.get(i)) == 0){
+    public static int getFirstEmptyCellIndex(Grid grid, ArrayList<Integer> indexes){
+        for(int i=0; i<indexes.size(); i++){
+            if(grid.cells().get(i).value  == 0){
                 return i;
             }
         }
         return -1;
     }
 
-    private static ArrayList<Integer> getCellRow(Grid grid, DynamicCell cell){
+    public static ArrayList<Cell> toCellRow(ArrayList<Integer> integerArray){
+        ArrayList<Cell> cellRow = new ArrayList<>();
+
+        for(int i = 0; i < integerArray.size(); i++){
+            Cell newCell = new Cell(i);
+
+            newCell.column = i;
+            cellRow.add(newCell);
+        }
+        return cellRow;
+    }
+
+    public static ArrayList<Integer> toIntegerRow(ArrayList<Cell> cellArray){
+        ArrayList<Integer> values = new ArrayList<>();
+
+        cellArray.forEach(cell -> {
+            values.add(cell.value);
+        });
+
+        return values;
+    }
+
+    public static int nextSmallestArrayIndex (ArrayList<ArrayList<Cell>> arrays){
+        // returns the index of the next smallest array in a list of arrays
+
+        int index = 0;
+        int lowestSize = arrays.getFirst().size();
+
+        for(int i = 0; i<arrays.size(); i++){
+            if(arrays.get(i).size() < lowestSize){
+                lowestSize = arrays.get(i).size();
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    private static ArrayList<Cell> getCellRow(Grid grid, Cell cell){
         return grid.rows().get(cell.row);
     }
-    private static ArrayList<Integer> getCellColumn(Grid grid, DynamicCell cell){
+    private static ArrayList<Cell> getCellColumn(Grid grid, Cell cell){
         return grid.columns().get(cell.column);
     }
-    private static ArrayList<Integer> getCellBlock(Grid grid, DynamicCell cell){
-
+    private static ArrayList<Cell> getCellBlock(Grid grid, Cell cell){
+        //TODO: IMPLEMENT
+        return new ArrayList<>();
     }
 }
