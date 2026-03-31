@@ -10,4 +10,11 @@ public class Cell {
     public Cell(int value){
         this.value = value;
     }
+
+    public Cell(int value, int row, int column, int block){
+        this.value = value;
+        this.row = row;
+        this.column = column;
+        this.block = block;
+    }
 }

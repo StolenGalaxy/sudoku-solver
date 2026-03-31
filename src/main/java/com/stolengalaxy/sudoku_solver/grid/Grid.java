@@ -32,7 +32,6 @@ public class Grid {
             }
             columns.add(column);
         }
-
         return columns;
     }
 
@@ -41,6 +40,9 @@ public class Grid {
     }
 
     public ArrayList<ArrayList<Cell>> blocks(){
+        // It should be possible to make this more efficient using some modulo calculations to decide on which block to
+        // add a cell to, but this is all I've been able to get working so far
+
         ArrayList<ArrayList<Cell>> blocks = new ArrayList<>();
 
 
@@ -99,11 +101,9 @@ public class Grid {
     public Grid setCell(Cell cell, int newValue){
         Grid modifiedGrid = this;
 
-        Cell newCell = new Cell(newValue);
-        newCell.column = cell.column;
-        newCell.block = cell.block;
-        System.out.println("changing " + modifiedGrid.rows.get(cell.row).get(cell.column).value + " to " + newValue);
+        Cell newCell = new Cell(newValue, cell.row, cell.column, cell.block);
         modifiedGrid.rows.get(cell.row).set(cell.column, newCell);
+
         return modifiedGrid;
     }
 
