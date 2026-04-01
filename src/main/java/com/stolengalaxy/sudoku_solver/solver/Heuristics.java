@@ -11,15 +11,22 @@ public class Heuristics {
     public static Grid fillNakedSingles(Grid grid){
         Grid modifiedGrid = grid;
 
-        // fill naked singles in rows
-        for(ArrayList<Cell> row:grid.rows()){
-            ArrayList<Integer> rowAsIntegers = CellTools.toIntegerRow(row);
-            ArrayList<Integer> missingValues = ArrayTools.findMissingValues(rowAsIntegers, grid.size);
+        ArrayList<ArrayList<ArrayList<Cell>>> rowsColumnsAndBlocks = new ArrayList<>();
 
-            if(missingValues.size() == 1){
-                // in this case a naked single is present
-                Cell emptyCell = CellTools.getEmptyCells(row).getFirst();
-                modifiedGrid = modifiedGrid.setCell(emptyCell, missingValues.getFirst());
+        rowsColumnsAndBlocks.add(grid.rows());
+        rowsColumnsAndBlocks.add(grid.columns());
+        rowsColumnsAndBlocks.add(grid.blocks());
+
+        for(ArrayList<ArrayList<Cell>> type:rowsColumnsAndBlocks){
+            for(ArrayList<Cell> set:type){
+                ArrayList<Integer> rowAsIntegers = CellTools.toIntegerRow(set);
+                ArrayList<Integer> missingValues = ArrayTools.findMissingValues(rowAsIntegers, grid.size);
+
+                if(missingValues.size() == 1){
+                    // in this case a naked single is present
+                    Cell emptyCell = CellTools.getEmptyCells(set).getFirst();
+                    modifiedGrid = modifiedGrid.setCell(emptyCell, missingValues.getFirst());
+                }
             }
         }
         return modifiedGrid;
