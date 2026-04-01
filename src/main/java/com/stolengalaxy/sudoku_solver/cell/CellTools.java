@@ -18,7 +18,7 @@ public class CellTools {
         ArrayList<Cell> cellRow = new ArrayList<>();
 
         for(int i = 0; i < integerArray.size(); i++){
-            Cell newCell = new Cell(i);
+            Cell newCell = new Cell(integerArray.get(i));
 
             newCell.column = i;
             cellRow.add(newCell);
@@ -49,6 +49,17 @@ public class CellTools {
             }
         }
         return index;
+    }
+
+    public static ArrayList<Cell> getEmptyCells(ArrayList<Cell> set){
+        ArrayList<Cell> emptyCells = new ArrayList<>();
+
+        for(Cell cell:set){
+            if(cell.value == 0){
+                emptyCells.add(cell);
+            }
+        }
+        return emptyCells;
     }
 
     private static ArrayList<Cell> getCellRow(Grid grid, Cell cell){
