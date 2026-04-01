@@ -31,12 +31,10 @@ public class DFS {
             Cell cell = grid.cells().get(cellToModifyIndex);
 
             if(cell.value < grid.size){
-
                 modifiedGrid = modifiedGrid.setCell(cell, cell.value + 1);
-
             } else{
-                cellToModifyIndex--;
                 modifiedGrid = modifiedGrid.setCell(cell, 0);
+                cellToModifyIndex--;
 
                 Cell previousCell = grid.cells().get(cellToModifyIndex);
                 modifiedGrid = modifiedGrid.setCell(previousCell, previousCell.value + 1);

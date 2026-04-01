@@ -58,7 +58,6 @@ public class CellTools {
         return grid.columns().get(cell.column);
     }
     private static ArrayList<Cell> getCellBlock(Grid grid, Cell cell){
-        //TODO: IMPLEMENT
-        return new ArrayList<>();
+        return grid.blocks().get(cell.block);
     }
 }
