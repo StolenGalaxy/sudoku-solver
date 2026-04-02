@@ -8,7 +8,7 @@ import com.stolengalaxy.sudoku_solver.util.ArrayTools;
 import java.util.ArrayList;
 
 public class Heuristics {
-    public static Grid fillNakedSingles(Grid grid){
+    public static Grid fillFullHouses(Grid grid){
         Grid modifiedGrid = grid;
 
         ArrayList<ArrayList<ArrayList<Cell>>> rowsColumnsAndBlocks = new ArrayList<>();
@@ -23,7 +23,7 @@ public class Heuristics {
                 ArrayList<Integer> missingValues = ArrayTools.findMissingValues(rowAsIntegers, grid.size);
 
                 if(missingValues.size() == 1){
-                    // in this case a naked single is present
+                    // in this case a full house is present
                     Cell emptyCell = CellTools.getEmptyCells(set).getFirst();
                     modifiedGrid = modifiedGrid.setCell(emptyCell, missingValues.getFirst());
                 }
