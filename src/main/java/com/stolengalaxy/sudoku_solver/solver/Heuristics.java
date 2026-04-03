@@ -8,19 +8,26 @@ import com.stolengalaxy.sudoku_solver.util.IntegerArrayTools;
 import java.util.ArrayList;
 
 public class Heuristics {
+    private static ArrayList<Integer> getCellCandidates(Grid grid, Cell cell){
+        ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getIntegerRowColumnAndBlock(grid, cell);
+        ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
+
+        return IntegerArrayTools.complement(union, grid.size);
+    }
+
     public static Grid fillFullHouses(Grid grid){
         Grid modifiedGrid = grid;
 
-        ArrayList<ArrayList<ArrayList<Cell>>> rowsColumnsAndBlocks = new ArrayList<>();
+        ArrayList<ArrayList<ArrayList<Cell>>> allRowsColumnsAndBlocks = new ArrayList<>();
 
-        rowsColumnsAndBlocks.add(grid.rows());
-        rowsColumnsAndBlocks.add(grid.columns());
-        rowsColumnsAndBlocks.add(grid.blocks());
+        allRowsColumnsAndBlocks.add(grid.rows());
+        allRowsColumnsAndBlocks.add(grid.columns());
+        allRowsColumnsAndBlocks.add(grid.blocks());
 
-        for(ArrayList<ArrayList<Cell>> type:rowsColumnsAndBlocks){
+        for(ArrayList<ArrayList<Cell>> type:allRowsColumnsAndBlocks){
             for(ArrayList<Cell> set:type){
                 ArrayList<Integer> rowAsIntegers = CellTools.toIntegerRow(set);
-                ArrayList<Integer> missingValues = IntegerArrayTools.findMissingValues(rowAsIntegers, grid.size);
+                ArrayList<Integer> missingValues = IntegerArrayTools.complement(rowAsIntegers, grid.size);
 
                 if(missingValues.size() == 1){
                     // in this case a full house is present
@@ -33,27 +40,18 @@ public class Heuristics {
     }
 
     public static Grid fillNakedSingles(Grid grid){
+        Grid modifiedGrid = grid;
         for(ArrayList<Cell> row:grid.rows()){
             for(Cell cell:row){
-                ArrayList<Cell> cellRow = CellTools.getCellRow(grid, cell);
-                ArrayList<Cell> cellColumn = CellTools.getCellColumn(grid, cell);
-                ArrayList<Cell> cellBlock = CellTools.getCellBlock(grid, cell);
+                ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getIntegerRowColumnAndBlock(grid, cell);
+                ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
 
-                ArrayList<ArrayList<Integer>> rowsColumnsAndBlocks = new ArrayList<>();
-
-                rowsColumnsAndBlocks.add(CellTools.toIntegerRow(cellRow));
-                rowsColumnsAndBlocks.add(CellTools.toIntegerRow(cellColumn));
-                rowsColumnsAndBlocks.add(CellTools.toIntegerRow(cellBlock));
-
-                ArrayList<Integer> union = IntegerArrayTools.union(rowsColumnsAndBlocks);
-
-                ArrayList<Integer> missingValues = IntegerArrayTools.findMissingValues(union, grid.size);
+                ArrayList<Integer> missingValues = IntegerArrayTools.complement(union, grid.size);
                 if(missingValues.size() == 1){
-                    // this cell is a naked single
-                    System.out.println(cell.row + ", " + cell.column);
+                    modifiedGrid = modifiedGrid.setCell(cell, missingValues.getFirst());
                 }
             }
         }
-        return grid;
+        return modifiedGrid;
     }
 }

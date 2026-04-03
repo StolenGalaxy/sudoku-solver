@@ -1,7 +1,6 @@
 package com.stolengalaxy.sudoku_solver.cell;
 
 import com.stolengalaxy.sudoku_solver.grid.Grid;
-
 import java.util.ArrayList;
 
 public class CellTools {
@@ -62,13 +61,21 @@ public class CellTools {
         return emptyCells;
     }
 
-    public static ArrayList<Cell> getCellRow(Grid grid, Cell cell){
+    private static ArrayList<Cell> getCellRow(Grid grid, Cell cell){
         return grid.rows().get(cell.row);
     }
-    public static ArrayList<Cell> getCellColumn(Grid grid, Cell cell){
+    private static ArrayList<Cell> getCellColumn(Grid grid, Cell cell){
         return grid.columns().get(cell.column);
     }
-    public static ArrayList<Cell> getCellBlock(Grid grid, Cell cell){
+    private static ArrayList<Cell> getCellBlock(Grid grid, Cell cell){
         return grid.blocks().get(cell.block);
+    }
+
+    public static ArrayList<ArrayList<Integer>> getIntegerRowColumnAndBlock(Grid grid, Cell cell){
+        ArrayList<ArrayList<Integer>> rowColumnAndBlock = new ArrayList<>();
+        rowColumnAndBlock.add(toIntegerRow(CellTools.getCellRow(grid, cell)));
+        rowColumnAndBlock.add(toIntegerRow(CellTools.getCellColumn(grid, cell)));
+        rowColumnAndBlock.add(toIntegerRow(CellTools.getCellBlock(grid, cell)));
+        return rowColumnAndBlock;
     }
 }

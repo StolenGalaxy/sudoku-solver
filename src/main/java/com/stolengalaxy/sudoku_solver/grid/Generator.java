@@ -3,7 +3,6 @@ package com.stolengalaxy.sudoku_solver.grid;
 import com.stolengalaxy.sudoku_solver.cell.Cell;
 import com.stolengalaxy.sudoku_solver.cell.CellTools;
 import com.stolengalaxy.sudoku_solver.util.IntegerArrayTools;
-
 import java.util.ArrayList;
 
 public class Generator {

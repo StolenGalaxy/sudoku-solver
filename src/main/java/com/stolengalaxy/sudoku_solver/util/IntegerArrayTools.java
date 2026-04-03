@@ -1,7 +1,6 @@
 package com.stolengalaxy.sudoku_solver.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -49,7 +48,7 @@ public class IntegerArrayTools {
         return array;
     }
 
-    public static ArrayList<Integer> findMissingValues(ArrayList<Integer> set, int max){
+    public static ArrayList<Integer> complement(ArrayList<Integer> set, int max){
         // Finds missing values including and between 1 and the specified maximum value
         ArrayList<Integer> missingValues = new ArrayList<>();
         for(int i = 1; i < max + 1; i ++){
