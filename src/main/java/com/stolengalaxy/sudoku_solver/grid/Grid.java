@@ -113,6 +113,7 @@ public class Grid {
         return modifiedGrid;
     }
 
+    @Override
     public String toString(){
         StringBuilder printableGrid = new StringBuilder();
         for(ArrayList<Cell> row:this.rows){
@@ -133,9 +134,5 @@ public class Grid {
 
     public ArrayList<Integer> validValues(){
         return IntegerArrayTools.orderedIntegerArray(this.size);
-    }
-
-    public ArrayList<Integer> getPossibleCellValues(Cell cell){
-        return new ArrayList<>();
     }
 }
