@@ -71,11 +71,21 @@ public class CellTools {
         return grid.blocks().get(cell.block);
     }
 
-    public static ArrayList<ArrayList<Integer>> getIntegerRowColumnAndBlock(Grid grid, Cell cell){
+    public static ArrayList<ArrayList<Integer>> getRowColumnAndBlockAsIntegers(Grid grid, Cell cell){
         ArrayList<ArrayList<Integer>> rowColumnAndBlock = new ArrayList<>();
         rowColumnAndBlock.add(toIntegerRow(CellTools.getCellRow(grid, cell)));
         rowColumnAndBlock.add(toIntegerRow(CellTools.getCellColumn(grid, cell)));
         rowColumnAndBlock.add(toIntegerRow(CellTools.getCellBlock(grid, cell)));
         return rowColumnAndBlock;
     }
+
+    public static ArrayList<ArrayList<Cell>> getAllRowsColumnsAndBlocks(Grid grid){
+        ArrayList<ArrayList<Cell>> allRowsColumnsAndBlocks = new ArrayList<>();
+        allRowsColumnsAndBlocks.addAll(grid.rows());
+        allRowsColumnsAndBlocks.addAll(grid.columns());
+        allRowsColumnsAndBlocks.addAll(grid.blocks());
+        return allRowsColumnsAndBlocks;
+    }
+
+
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Heuristics {
     private static ArrayList<Integer> getCellCandidates(Grid grid, Cell cell){
-        ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getIntegerRowColumnAndBlock(grid, cell);
+        ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, cell);
         ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
 
         return IntegerArrayTools.complement(union, grid.size);
@@ -18,22 +18,16 @@ public class Heuristics {
     public static Grid fillFullHouses(Grid grid){
         Grid modifiedGrid = grid;
 
-        ArrayList<ArrayList<ArrayList<Cell>>> allRowsColumnsAndBlocks = new ArrayList<>();
+        ArrayList<ArrayList<Cell>> allRowsColumnsAndBlocks = CellTools.getAllRowsColumnsAndBlocks(grid);
 
-        allRowsColumnsAndBlocks.add(grid.rows());
-        allRowsColumnsAndBlocks.add(grid.columns());
-        allRowsColumnsAndBlocks.add(grid.blocks());
+        for(ArrayList<Cell> set:allRowsColumnsAndBlocks){
+            ArrayList<Integer> rowAsIntegers = CellTools.toIntegerRow(set);
+            ArrayList<Integer> missingValues = IntegerArrayTools.complement(rowAsIntegers, grid.size);
 
-        for(ArrayList<ArrayList<Cell>> type:allRowsColumnsAndBlocks){
-            for(ArrayList<Cell> set:type){
-                ArrayList<Integer> rowAsIntegers = CellTools.toIntegerRow(set);
-                ArrayList<Integer> missingValues = IntegerArrayTools.complement(rowAsIntegers, grid.size);
-
-                if(missingValues.size() == 1){
-                    // in this case a full house is present
-                    Cell emptyCell = CellTools.getEmptyCells(set).getFirst();
-                    modifiedGrid = modifiedGrid.setCell(emptyCell, missingValues.getFirst());
-                }
+            if(missingValues.size() == 1){
+                // in this case a full house is present
+                Cell emptyCell = CellTools.getEmptyCells(set).getFirst();
+                modifiedGrid = modifiedGrid.setCell(emptyCell, missingValues.getFirst());
             }
         }
         return modifiedGrid;
@@ -43,7 +37,7 @@ public class Heuristics {
         Grid modifiedGrid = grid;
         for(ArrayList<Cell> row:grid.rows()){
             for(Cell cell:row){
-                ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getIntegerRowColumnAndBlock(grid, cell);
+                ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, cell);
                 ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
 
                 ArrayList<Integer> missingValues = IntegerArrayTools.complement(union, grid.size);
