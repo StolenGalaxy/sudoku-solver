@@ -2,7 +2,7 @@ package com.stolengalaxy.sudoku_solver.grid;
 
 import com.stolengalaxy.sudoku_solver.cell.Cell;
 import com.stolengalaxy.sudoku_solver.cell.CellTools;
-import com.stolengalaxy.sudoku_solver.util.ArrayTools;
+import com.stolengalaxy.sudoku_solver.util.IntegerArrayTools;
 
 import java.util.ArrayList;
 
@@ -132,7 +132,7 @@ public class Grid {
     }
 
     public ArrayList<Integer> validValues(){
-        return ArrayTools.orderedIntegerArray(this.size);
+        return IntegerArrayTools.orderedIntegerArray(this.size);
     }
 
     public ArrayList<Integer> getPossibleCellValues(Cell cell){

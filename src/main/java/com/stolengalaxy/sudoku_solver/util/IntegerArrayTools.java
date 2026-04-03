@@ -1,9 +1,11 @@
 package com.stolengalaxy.sudoku_solver.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Random;
 
-public class ArrayTools {
+public class IntegerArrayTools {
     public static int countIntegerOccurrences(ArrayList<Integer> array, int targetInteger){
         int count = 0;
         for(int value:array){
@@ -58,5 +60,11 @@ public class ArrayTools {
         return missingValues;
     }
 
-
+    public static ArrayList<Integer> union(ArrayList<ArrayList<Integer>> sets){
+        HashSet<Integer> uniqueValues = new HashSet<Integer>();
+        for(ArrayList<Integer> set:sets){
+            uniqueValues.addAll(set);
+        }
+        return new ArrayList<>(uniqueValues);
+    }
 }

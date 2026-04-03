@@ -2,7 +2,7 @@ package com.stolengalaxy.sudoku_solver.grid;
 
 import com.stolengalaxy.sudoku_solver.cell.Cell;
 import com.stolengalaxy.sudoku_solver.cell.CellTools;
-import com.stolengalaxy.sudoku_solver.util.ArrayTools;
+import com.stolengalaxy.sudoku_solver.util.IntegerArrayTools;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ public class Validation {
                 break;
             }
             ArrayList<Integer> values = CellTools.toIntegerRow(cells);
-            if (ArrayTools.countIntegerOccurrences(values, cell.value) > 1){
+            if (IntegerArrayTools.countIntegerOccurrences(values, cell.value) > 1){
                 stillValid = false;
                 break;
             }
