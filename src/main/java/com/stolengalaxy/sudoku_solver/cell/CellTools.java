@@ -62,13 +62,13 @@ public class CellTools {
         return emptyCells;
     }
 
-    private static ArrayList<Cell> getCellRow(Grid grid, Cell cell){
+    public static ArrayList<Cell> getCellRow(Grid grid, Cell cell){
         return grid.rows().get(cell.row);
     }
-    private static ArrayList<Cell> getCellColumn(Grid grid, Cell cell){
+    public static ArrayList<Cell> getCellColumn(Grid grid, Cell cell){
         return grid.columns().get(cell.column);
     }
-    private static ArrayList<Cell> getCellBlock(Grid grid, Cell cell){
+    public static ArrayList<Cell> getCellBlock(Grid grid, Cell cell){
         return grid.blocks().get(cell.block);
     }
 }
