@@ -48,4 +48,13 @@ public class Heuristics {
         }
         return modifiedGrid;
     }
+
+    public static Grid fillHiddenSingles(Grid grid){
+        Grid modifiedGrid = grid;
+        ArrayList<ArrayList<Cell>> allRowsColumnsAndBlocks = CellTools.getAllRowsColumnsAndBlocks(grid);
+
+        for(int setIndex = 0; setIndex < allRowsColumnsAndBlocks.size(); setIndex++){
+        }
+        return modifiedGrid;
+    }
 }
