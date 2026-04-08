@@ -106,7 +106,6 @@ public class Grid {
 
     public Grid setCell(Cell cell, int newValue){
         Grid modifiedGrid = this;
-
         Cell newCell = new Cell(newValue, cell.row, cell.column, cell.block);
         modifiedGrid.rows.get(cell.row).set(cell.column, newCell);
 
@@ -136,13 +135,13 @@ public class Grid {
         return IntegerArrayTools.orderedIntegerArray(this.size);
     }
 
-    public ArrayList<Integer> getEmptyCellIndexes(){
-        ArrayList<Integer> indexes = new ArrayList<>();
-        for(int i = 0; i < cells().size(); i++){
-            if(cells().get(i).value == 0){
-                indexes.add(i);
+    public ArrayList<Cell> emptyCells(){
+        ArrayList<Cell> emptyCells = new ArrayList<>();
+        for(Cell cell:cells()){
+            if(cell.value == 0){
+                emptyCells.add(cell);
             }
         }
-        return indexes;
+        return emptyCells;
     }
 }

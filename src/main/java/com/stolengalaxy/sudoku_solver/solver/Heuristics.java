@@ -37,15 +37,13 @@ public class Heuristics {
     private static Grid fillNakedSingles(Grid grid){
         Grid modifiedGrid = grid;
 
-        for(int emptyCellIndex:grid.getEmptyCellIndexes()){
-            Cell cell = grid.cells().get(emptyCellIndex);
-
-            ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, cell);
+        for(Cell emptyCell: grid.emptyCells()){
+            ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, emptyCell);
             ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
 
             ArrayList<Integer> missingValues = IntegerArrayTools.complement(union, grid.size);
             if(missingValues.size() == 1){
-                modifiedGrid = modifiedGrid.setCell(cell, missingValues.getFirst());
+                modifiedGrid = modifiedGrid.setCell(emptyCell, missingValues.getFirst());
             }
         }
         return modifiedGrid;

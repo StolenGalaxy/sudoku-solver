@@ -4,15 +4,6 @@ import com.stolengalaxy.sudoku_solver.grid.Grid;
 import java.util.ArrayList;
 
 public class CellTools {
-    public static int getFirstEmptyCellIndex(Grid grid, ArrayList<Integer> indexes){
-        for(int i=0; i<indexes.size(); i++){
-            if(grid.cells().get(i).value  == 0){
-                return i;
-            }
-        }
-        return -1;
-    }
-
     public static ArrayList<Cell> toCellRow(ArrayList<Integer> integerArray){
         ArrayList<Cell> cellRow = new ArrayList<>();
 
@@ -86,6 +77,4 @@ public class CellTools {
         allRowsColumnsAndBlocks.addAll(grid.blocks());
         return allRowsColumnsAndBlocks;
     }
-
-
 }
