@@ -5,6 +5,7 @@ import com.stolengalaxy.sudoku_solver.cell.CellTools;
 import com.stolengalaxy.sudoku_solver.grid.Generator;
 import com.stolengalaxy.sudoku_solver.grid.Grid;
 import com.stolengalaxy.sudoku_solver.util.IntegerArrayTools;
+
 import java.util.ArrayList;
 
 public class Heuristics {
@@ -35,15 +36,16 @@ public class Heuristics {
 
     private static Grid fillNakedSingles(Grid grid){
         Grid modifiedGrid = grid;
-        for(ArrayList<Cell> row:grid.rows()){
-            for(Cell cell:row){
-                ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, cell);
-                ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
 
-                ArrayList<Integer> missingValues = IntegerArrayTools.complement(union, grid.size);
-                if(missingValues.size() == 1){
-                    modifiedGrid = modifiedGrid.setCell(cell, missingValues.getFirst());
-                }
+        for(int emptyCellIndex:grid.getEmptyCellIndexes()){
+            Cell cell = grid.cells().get(emptyCellIndex);
+
+            ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, cell);
+            ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
+
+            ArrayList<Integer> missingValues = IntegerArrayTools.complement(union, grid.size);
+            if(missingValues.size() == 1){
+                modifiedGrid = modifiedGrid.setCell(cell, missingValues.getFirst());
             }
         }
         return modifiedGrid;
@@ -98,7 +100,6 @@ public class Heuristics {
             modifiedGrid = fillFullHouses(modifiedGrid);
             currentGrid = modifiedGrid;
         }
-
         return modifiedGrid;
     }
 }

@@ -8,20 +8,8 @@ import com.stolengalaxy.sudoku_solver.grid.Validation;
 import java.util.ArrayList;
 
 public class DFS {
-    private static ArrayList<Integer> getEmptyCellIndexes(Grid grid){
-        ArrayList<Integer> indexes= new ArrayList<>();
-
-        for(int i = 0; i < grid.cells().size(); i++){
-            if(grid.cells().get(i).value == 0){
-                indexes.add(i);
-            }
-        }
-
-        return indexes;
-    }
-
     public static Grid complete(Grid grid){
-        ArrayList<Integer> emptyCellIndexes = getEmptyCellIndexes(grid);
+        ArrayList<Integer> emptyCellIndexes = grid.getEmptyCellIndexes();
         Grid modifiedGrid = grid;
 
         int cellToModifyIndex = CellTools.getFirstEmptyCellIndex(modifiedGrid, emptyCellIndexes);
@@ -44,7 +32,6 @@ public class DFS {
                 cellToModifyIndex++;
             }
         }
-
         return modifiedGrid;
     }
 }

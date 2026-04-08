@@ -135,4 +135,14 @@ public class Grid {
     public ArrayList<Integer> validValues(){
         return IntegerArrayTools.orderedIntegerArray(this.size);
     }
+
+    public ArrayList<Integer> getEmptyCellIndexes(){
+        ArrayList<Integer> indexes = new ArrayList<>();
+        for(int i = 0; i < cells().size(); i++){
+            if(cells().get(i).value == 0){
+                indexes.add(i);
+            }
+        }
+        return indexes;
+    }
 }
