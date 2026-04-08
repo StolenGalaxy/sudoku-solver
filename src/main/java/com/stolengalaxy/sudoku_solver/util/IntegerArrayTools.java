@@ -32,14 +32,11 @@ public class IntegerArrayTools {
     }
 
     public static ArrayList<Integer> unorderedIntegerArray(int length){
-
         ArrayList<Integer> array = blankArray(length);
-
         ArrayList<Integer> unusedValues = orderedIntegerArray(length);
 
         Random random = new Random();
         for(int i = 0; i < length; i++){
-
             int randomListIndex = random.nextInt(unusedValues.size());
             int randomUnusedValue = unusedValues.get(randomListIndex);
             unusedValues.remove(randomListIndex);

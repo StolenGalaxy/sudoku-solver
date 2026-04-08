@@ -4,7 +4,6 @@ import com.stolengalaxy.sudoku_solver.cell.Cell;
 import com.stolengalaxy.sudoku_solver.cell.CellTools;
 import com.stolengalaxy.sudoku_solver.grid.Grid;
 import com.stolengalaxy.sudoku_solver.util.IntegerArrayTools;
-
 import java.util.ArrayList;
 
 public class Heuristics {
@@ -54,6 +53,37 @@ public class Heuristics {
         ArrayList<ArrayList<Cell>> allRowsColumnsAndBlocks = CellTools.getAllRowsColumnsAndBlocks(grid);
 
         for(int setIndex = 0; setIndex < allRowsColumnsAndBlocks.size(); setIndex++){
+            // what values are missing?
+            ArrayList<Cell> currentSet = allRowsColumnsAndBlocks.get(setIndex);
+            ArrayList<Integer> missingValues = IntegerArrayTools.complement(CellTools.toIntegerRow(currentSet), grid.size);
+
+            ArrayList<ArrayList<Integer>> setCellCandidates = new ArrayList<>();
+            for(Cell cell:currentSet){
+                ArrayList<Integer> cellCandidates = getCellCandidates(grid, cell);
+                setCellCandidates.add(cellCandidates);
+            }
+
+            for(int value:missingValues){
+                int candidateOccurrences = 0;
+
+                for(ArrayList<Integer> cellCandidates:setCellCandidates){
+                    if(cellCandidates.contains(value)){
+                        candidateOccurrences++;
+                    }
+                }
+                // does a hidden single exist in this set?
+                if(candidateOccurrences == 1){
+                    // which cell has the candidate?
+                    for(int cellIndexInSet = 0; cellIndexInSet < grid.size; cellIndexInSet++){
+                        Cell cell = currentSet.get(cellIndexInSet);
+                        if(getCellCandidates(grid, cell).contains(value)){
+                            // this cell contains the hidden single, set it to that value
+                            modifiedGrid = modifiedGrid.setCell(cell, value);
+                            //System.out.println("hidden single (" + value + ") at (" + cell.row + ", " + cell.column + ")");
+                        }
+                    }
+                }
+            }
         }
         return modifiedGrid;
     }
