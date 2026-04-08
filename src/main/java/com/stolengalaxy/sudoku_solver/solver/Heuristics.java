@@ -2,6 +2,7 @@ package com.stolengalaxy.sudoku_solver.solver;
 
 import com.stolengalaxy.sudoku_solver.cell.Cell;
 import com.stolengalaxy.sudoku_solver.cell.CellTools;
+import com.stolengalaxy.sudoku_solver.grid.Generator;
 import com.stolengalaxy.sudoku_solver.grid.Grid;
 import com.stolengalaxy.sudoku_solver.util.IntegerArrayTools;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class Heuristics {
         return IntegerArrayTools.complement(union, grid.size);
     }
 
-    public static Grid fillFullHouses(Grid grid){
+    private static Grid fillFullHouses(Grid grid){
         Grid modifiedGrid = grid;
 
         ArrayList<ArrayList<Cell>> allRowsColumnsAndBlocks = CellTools.getAllRowsColumnsAndBlocks(grid);
@@ -32,7 +33,7 @@ public class Heuristics {
         return modifiedGrid;
     }
 
-    public static Grid fillNakedSingles(Grid grid){
+    private static Grid fillNakedSingles(Grid grid){
         Grid modifiedGrid = grid;
         for(ArrayList<Cell> row:grid.rows()){
             for(Cell cell:row){
@@ -48,17 +49,16 @@ public class Heuristics {
         return modifiedGrid;
     }
 
-    public static Grid fillHiddenSingles(Grid grid){
+    private static Grid fillHiddenSingles(Grid grid){
         Grid modifiedGrid = grid;
         ArrayList<ArrayList<Cell>> allRowsColumnsAndBlocks = CellTools.getAllRowsColumnsAndBlocks(grid);
 
-        for(int setIndex = 0; setIndex < allRowsColumnsAndBlocks.size(); setIndex++){
+        for(ArrayList<Cell> set:allRowsColumnsAndBlocks){
             // what values are missing?
-            ArrayList<Cell> currentSet = allRowsColumnsAndBlocks.get(setIndex);
-            ArrayList<Integer> missingValues = IntegerArrayTools.complement(CellTools.toIntegerRow(currentSet), grid.size);
+            ArrayList<Integer> missingValues = IntegerArrayTools.complement(CellTools.toIntegerRow(set), grid.size);
 
             ArrayList<ArrayList<Integer>> setCellCandidates = new ArrayList<>();
-            for(Cell cell:currentSet){
+            for(Cell cell:set){
                 ArrayList<Integer> cellCandidates = getCellCandidates(grid, cell);
                 setCellCandidates.add(cellCandidates);
             }
@@ -75,7 +75,7 @@ public class Heuristics {
                 if(candidateOccurrences == 1){
                     // which cell has the candidate?
                     for(int cellIndexInSet = 0; cellIndexInSet < grid.size; cellIndexInSet++){
-                        Cell cell = currentSet.get(cellIndexInSet);
+                        Cell cell = set.get(cellIndexInSet);
                         if(getCellCandidates(grid, cell).contains(value)){
                             // this cell contains the hidden single, set it to that value
                             modifiedGrid = modifiedGrid.setCell(cell, value);
@@ -85,6 +85,20 @@ public class Heuristics {
                 }
             }
         }
+        return modifiedGrid;
+    }
+
+    public static Grid applyHeuristics(Grid grid){
+        Grid currentGrid = grid;
+        Grid modifiedGrid = Generator.emptyGrid(grid.size);
+
+        while(modifiedGrid != currentGrid){
+            modifiedGrid = fillHiddenSingles(currentGrid);
+            modifiedGrid = fillNakedSingles(modifiedGrid);
+            modifiedGrid = fillFullHouses(modifiedGrid);
+            currentGrid = modifiedGrid;
+        }
+
         return modifiedGrid;
     }
 }
