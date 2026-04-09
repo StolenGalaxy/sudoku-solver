@@ -7,7 +7,7 @@ import com.stolengalaxy.sudoku_solver.util.IntegerArrayTools;
 import java.util.ArrayList;
 
 public class Validation {
-    public static boolean isSetValid(ArrayList<Cell> cells, ArrayList<Integer> validValues){
+    private static boolean isSetValid(ArrayList<Cell> cells, ArrayList<Integer> validValues){
         boolean stillValid = true;
 
         for(Cell cell:cells){
@@ -51,7 +51,7 @@ public class Validation {
         return stillValid;
     }
 
-    public static boolean isGridComplete(Grid grid){
+    public static boolean isGridFull(Grid grid){
         ArrayList<Integer> values = CellTools.toIntegerRow(grid.cells());
         return !values.contains(0) && isGridValid(grid);
     }
