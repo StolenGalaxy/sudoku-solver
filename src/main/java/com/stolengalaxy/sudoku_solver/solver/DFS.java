@@ -12,7 +12,7 @@ public class DFS {
         Grid modifiedGrid = grid;
         ArrayList<Cell> emptyCells = grid.emptyCells();
 
-        while(!Validation.isGridFull(grid)){
+        while(!Validation.isGridFull(modifiedGrid)){
             // increment the first dynamic cell before the first empty cell by 1
             Cell cell = emptyCells.get(cellToModifyIndex);
 
@@ -26,7 +26,7 @@ public class DFS {
                 modifiedGrid = modifiedGrid.setCell(previousCell, previousCell.value + 1);
             }
 
-            if(Validation.isGridValid(grid)){
+            if(Validation.isGridValid(modifiedGrid)){
                 cellToModifyIndex++;
             }
 
