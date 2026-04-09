@@ -28,6 +28,11 @@ public class Heuristics {
             if(missingValues.size() == 1){
                 // in this case a full house is present
                 Cell emptyCell = CellTools.getEmptyCells(set).getFirst();
+
+                if(!getCellCandidates(grid, emptyCell).contains(missingValues.getFirst())){
+                    throw new RuntimeException("An error occurred while finding Full Houses. Are you sure the given grid was solvable?");
+                }
+
                 modifiedGrid = modifiedGrid.setCell(emptyCell, missingValues.getFirst());
             }
         }
