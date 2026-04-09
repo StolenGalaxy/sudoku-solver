@@ -36,7 +36,7 @@ public class Grid {
     }
 
     public ArrayList<ArrayList<Cell>> rows(){
-        return rows;
+        return new ArrayList<>(this.rows);
     }
 
     public ArrayList<ArrayList<Cell>> blocks(){
@@ -105,11 +105,35 @@ public class Grid {
     }
 
     public Grid setCell(Cell cell, int newValue){
-        Grid modifiedGrid = this;
-        Cell newCell = new Cell(newValue, cell.row, cell.column, cell.block);
-        modifiedGrid.rows.get(cell.row).set(cell.column, newCell);
+        ArrayList<ArrayList<Cell>> oldRows = rows();
+        ArrayList<Cell> oldRow = oldRows.get(cell.row);
+        ArrayList<Integer> values = CellTools.toIntegerRow(oldRow);
 
-        return modifiedGrid;
+        // creating the new row
+        ArrayList<Cell> newRow = new ArrayList<>();
+        for(int columnIndex = 0; columnIndex < values.size(); columnIndex++){
+            Cell newCell = new Cell(values.get(columnIndex));
+
+            newCell.column = columnIndex;
+            newCell.row = cell.row;
+
+            if(columnIndex != cell.column){
+                newCell.value = oldRow.get(columnIndex).value;
+            } else{
+                newCell.value = newValue;
+            }
+            newRow.add(newCell);
+        }
+        // adding all rows back
+        ArrayList<ArrayList<Cell>> newRows = new ArrayList<>();
+        for(int rowIndex = 0; rowIndex < oldRows.size(); rowIndex++){
+            if(rowIndex != cell.row){
+                newRows.add(new ArrayList<>(oldRows.get(rowIndex)));
+            } else{
+                newRows.add(newRow);
+            }
+        }
+        return new Grid(newRows);
     }
 
     @Override
