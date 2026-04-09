@@ -10,10 +10,17 @@ import java.util.ArrayList;
 
 public class Heuristics {
     private static ArrayList<Integer> getCellCandidates(Grid grid, Cell cell){
-        ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, cell);
-        ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
 
-        return IntegerArrayTools.complement(union, grid.size);
+        if (cell.value == 0){
+            ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, cell);
+            ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
+            return IntegerArrayTools.complement(union, grid.size);
+        } else{
+            return new ArrayList<>();
+        }
+
+
+
     }
 
     private static Grid fillFullHouses(Grid grid){
@@ -58,7 +65,9 @@ public class Heuristics {
         Grid modifiedGrid = grid;
         ArrayList<ArrayList<Cell>> allRowsColumnsAndBlocks = CellTools.getAllRowsColumnsAndBlocks(grid);
 
+        int rowIndex = 0;
         for(ArrayList<Cell> set:allRowsColumnsAndBlocks){
+
             // what values are missing?
             ArrayList<Integer> missingValues = IntegerArrayTools.complement(CellTools.toIntegerRow(set), grid.size);
 
@@ -67,14 +76,15 @@ public class Heuristics {
                 ArrayList<Integer> cellCandidates = getCellCandidates(grid, cell);
                 setCellCandidates.add(cellCandidates);
             }
-
             for(int value:missingValues){
                 int candidateOccurrences = 0;
 
+                int columnIndex = 0;
                 for(ArrayList<Integer> cellCandidates:setCellCandidates){
                     if(cellCandidates.contains(value)){
                         candidateOccurrences++;
                     }
+                    columnIndex++;
                 }
                 // does a hidden single exist in this set?
                 if(candidateOccurrences == 1){
@@ -89,6 +99,7 @@ public class Heuristics {
                     }
                 }
             }
+            rowIndex++;
         }
         return modifiedGrid;
     }
