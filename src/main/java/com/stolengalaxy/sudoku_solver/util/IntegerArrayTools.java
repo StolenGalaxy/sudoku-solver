@@ -1,9 +1,10 @@
 package com.stolengalaxy.sudoku_solver.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
-public class ArrayTools {
+public class IntegerArrayTools {
     public static int countIntegerOccurrences(ArrayList<Integer> array, int targetInteger){
         int count = 0;
         for(int value:array){
@@ -31,14 +32,11 @@ public class ArrayTools {
     }
 
     public static ArrayList<Integer> unorderedIntegerArray(int length){
-
         ArrayList<Integer> array = blankArray(length);
-
         ArrayList<Integer> unusedValues = orderedIntegerArray(length);
 
         Random random = new Random();
         for(int i = 0; i < length; i++){
-
             int randomListIndex = random.nextInt(unusedValues.size());
             int randomUnusedValue = unusedValues.get(randomListIndex);
             unusedValues.remove(randomListIndex);
@@ -47,19 +45,22 @@ public class ArrayTools {
         return array;
     }
 
-    public static int nextSmallestArrayIndex (ArrayList<ArrayList<Integer>> arrays){
-        // returns the index of the next smallest array in a list of arrays
-
-        int index = 0;
-        int lowestSize = arrays.getFirst().size();
-
-        for(int i = 0; i<arrays.size(); i++){
-            if(arrays.get(i).size() < lowestSize){
-                lowestSize = arrays.get(i).size();
-                index = i;
+    public static ArrayList<Integer> complement(ArrayList<Integer> set, int max){
+        // Finds missing values including and between 1 and the specified maximum value
+        ArrayList<Integer> missingValues = new ArrayList<>();
+        for(int i = 1; i < max + 1; i ++){
+            if(!set.contains(i)){
+                missingValues.add(i);
             }
         }
+        return missingValues;
+    }
 
-        return index;
+    public static ArrayList<Integer> union(ArrayList<ArrayList<Integer>> sets){
+        HashSet<Integer> uniqueValues = new HashSet<Integer>();
+        for(ArrayList<Integer> set:sets){
+            uniqueValues.addAll(set);
+        }
+        return new ArrayList<>(uniqueValues);
     }
 }
