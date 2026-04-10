@@ -9,7 +9,7 @@ public class CellTools {
 
         for(int i = 0; i < integerArray.size(); i++){
             Cell newCell = new Cell(integerArray.get(i));
-
+            newCell.value = integerArray.get(i);
             newCell.column = i;
             cellRow.add(newCell);
         }

@@ -8,12 +8,13 @@ import com.stolengalaxy.sudoku_solver.solver.Heuristics;
 public class Main {
     static void main() {
         Grid grid = Importer.fromCSV();
-        System.out.println("Starting grid:\n" + grid + "\n");
+        System.out.println("Initial grid:\n" + grid + "\n");
 
-        grid = Heuristics.applyHeuristics(grid);
-        System.out.println("Applied heuristics:\n" + grid + "\n");
+        Grid modifiedGrid = Heuristics.completeHeuristics(grid);
+        System.out.println("Heuristics applied:\n" + modifiedGrid + "\n");
 
-        grid = DFS.complete(grid);
-        System.out.println("Applied DFS:\n" + grid);
+        modifiedGrid = DFS.complete(modifiedGrid);
+        System.out.println("DFS applied:\n" + modifiedGrid);
+
     }
 }

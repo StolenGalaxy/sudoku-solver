@@ -10,10 +10,14 @@ import java.util.ArrayList;
 
 public class Heuristics {
     private static ArrayList<Integer> getCellCandidates(Grid grid, Cell cell){
-        ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, cell);
-        ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
 
-        return IntegerArrayTools.complement(union, grid.size);
+        if (cell.value == 0){
+            ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, cell);
+            ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
+            return IntegerArrayTools.complement(union, grid.size);
+        } else{
+            return new ArrayList<>();
+        }
     }
 
     private static Grid fillFullHouses(Grid grid){
@@ -59,6 +63,7 @@ public class Heuristics {
         ArrayList<ArrayList<Cell>> allRowsColumnsAndBlocks = CellTools.getAllRowsColumnsAndBlocks(grid);
 
         for(ArrayList<Cell> set:allRowsColumnsAndBlocks){
+
             // what values are missing?
             ArrayList<Integer> missingValues = IntegerArrayTools.complement(CellTools.toIntegerRow(set), grid.size);
 
@@ -67,7 +72,6 @@ public class Heuristics {
                 ArrayList<Integer> cellCandidates = getCellCandidates(grid, cell);
                 setCellCandidates.add(cellCandidates);
             }
-
             for(int value:missingValues){
                 int candidateOccurrences = 0;
 
@@ -84,7 +88,6 @@ public class Heuristics {
                         if(getCellCandidates(grid, cell).contains(value)){
                             // this cell contains the hidden single, set it to that value
                             modifiedGrid = modifiedGrid.setCell(cell, value);
-                            //System.out.println("hidden single (" + value + ") at (" + cell.row + ", " + cell.column + ")");
                         }
                     }
                 }
@@ -94,14 +97,20 @@ public class Heuristics {
     }
 
     public static Grid applyHeuristics(Grid grid){
-        Grid currentGrid = grid;
-        Grid modifiedGrid = Generator.emptyGrid(grid.size);
+        Grid modifiedGrid = fillHiddenSingles(grid);
+        modifiedGrid = fillNakedSingles(modifiedGrid);
+        modifiedGrid = fillFullHouses(modifiedGrid);
 
-        while(modifiedGrid != currentGrid){
-            modifiedGrid = fillHiddenSingles(currentGrid);
-            modifiedGrid = fillNakedSingles(modifiedGrid);
-            modifiedGrid = fillFullHouses(modifiedGrid);
-            currentGrid = modifiedGrid;
+        return modifiedGrid;
+    }
+
+    public static Grid completeHeuristics(Grid grid){
+        Grid oldGrid = grid;
+        Grid modifiedGrid = applyHeuristics(oldGrid);
+
+        while(!modifiedGrid.equals(oldGrid)){
+            oldGrid = modifiedGrid;
+            modifiedGrid = applyHeuristics(oldGrid);
         }
         return modifiedGrid;
     }
