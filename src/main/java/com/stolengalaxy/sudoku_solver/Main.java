@@ -3,7 +3,7 @@ package com.stolengalaxy.sudoku_solver;
 import com.stolengalaxy.sudoku_solver.grid.Grid;
 import com.stolengalaxy.sudoku_solver.grid.Importer;
 import com.stolengalaxy.sudoku_solver.solver.DFS;
-import com.stolengalaxy.sudoku_solver.solver.Heuristics;
+import com.stolengalaxy.sudoku_solver.solver.HeuristicTools;
 
 public class Main {
     static void main() {
@@ -11,7 +11,7 @@ public class Main {
         int initialEmptyCells = grid.emptyCells().size();
         System.out.println("Initial grid contains " + initialEmptyCells + " empty cells:\n" + grid);
 
-        Grid modifiedGrid = Heuristics.completeHeuristics(grid);
+        Grid modifiedGrid = HeuristicTools.completeHeuristics(grid);
         int postHeuristicEmptyCells = modifiedGrid.emptyCells().size();
         System.out.println("\nHeuristics applied, successfully solving " + (initialEmptyCells - postHeuristicEmptyCells) + " empty cells:\n" + modifiedGrid);
 

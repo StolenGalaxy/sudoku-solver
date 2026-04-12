@@ -7,7 +7,7 @@ import com.stolengalaxy.sudoku_solver.util.IntegerArrayTools;
 
 import java.util.ArrayList;
 
-public class Heuristics {
+public class HeuristicTools {
     private static ArrayList<Integer> getCellCandidates(Grid grid, Cell cell){
 
         if (cell.value == 0){
