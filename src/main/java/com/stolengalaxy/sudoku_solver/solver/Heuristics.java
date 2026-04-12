@@ -2,7 +2,6 @@ package com.stolengalaxy.sudoku_solver.solver;
 
 import com.stolengalaxy.sudoku_solver.cell.Cell;
 import com.stolengalaxy.sudoku_solver.cell.CellTools;
-import com.stolengalaxy.sudoku_solver.grid.Generator;
 import com.stolengalaxy.sudoku_solver.grid.Grid;
 import com.stolengalaxy.sudoku_solver.util.IntegerArrayTools;
 
@@ -18,6 +17,27 @@ public class Heuristics {
         } else{
             return new ArrayList<>();
         }
+    }
+
+    public static Cell getMRVCell(Grid grid){
+        ArrayList<Cell> cells = grid.cells();
+
+        // not just using values from the first cell as it may not be empty
+        Cell MRVCell = new Cell(0);
+        int minimumRemainingValues = (int) Math.pow(grid.size, 2) + 1;
+
+        for(Cell cell:cells){
+            if(cell.value != 0){
+                continue;
+            }
+            int remainingValues = getCellCandidates(grid, cell).size();
+
+            if(remainingValues < minimumRemainingValues){
+                minimumRemainingValues = remainingValues;
+                MRVCell = cell;
+            }
+        }
+        return MRVCell;
     }
 
     private static Grid fillFullHouses(Grid grid){
@@ -96,7 +116,7 @@ public class Heuristics {
         return modifiedGrid;
     }
 
-    public static Grid applyHeuristics(Grid grid){
+    private static Grid applyHeuristics(Grid grid){
         Grid modifiedGrid = fillHiddenSingles(grid);
         modifiedGrid = fillNakedSingles(modifiedGrid);
         modifiedGrid = fillFullHouses(modifiedGrid);
