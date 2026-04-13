@@ -21,4 +21,10 @@ public class Cell {
         this.column = column;
         this.block = block;
     }
+
+    @Override
+    public String toString(){
+        String formattable = "(Row: %d, Column: %d, Block: %d, Value: %d, Candidates: " + cellCandidates + ")";
+        return String.format(formattable, row, column, column, column);
+    }
 }
