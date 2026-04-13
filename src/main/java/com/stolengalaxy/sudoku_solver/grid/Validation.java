@@ -51,7 +51,7 @@ public class Validation {
         return stillValid;
     }
 
-    public static boolean isGridFull(Grid grid){
+    public static boolean isGridDone(Grid grid){
         ArrayList<Integer> values = CellTools.toIntegerRow(grid.cells());
         return !values.contains(0) && isGridValid(grid);
     }

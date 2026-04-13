@@ -8,17 +8,6 @@ import com.stolengalaxy.sudoku_solver.util.IntegerArrayTools;
 import java.util.ArrayList;
 
 public class HeuristicTools {
-    private static ArrayList<Integer> getCellCandidates(Grid grid, Cell cell){
-
-        if (cell.value == 0){
-            ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, cell);
-            ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
-            return IntegerArrayTools.complement(union, grid.size);
-        } else{
-            return new ArrayList<>();
-        }
-    }
-
     public static Cell getMRVCell(Grid grid){
         ArrayList<Cell> cells = grid.cells();
 
@@ -30,7 +19,7 @@ public class HeuristicTools {
             if(cell.value != 0){
                 continue;
             }
-            int remainingValues = getCellCandidates(grid, cell).size();
+            int remainingValues = cell.cellCandidates.size();
 
             if(remainingValues < minimumRemainingValues){
                 minimumRemainingValues = remainingValues;
@@ -57,7 +46,7 @@ public class HeuristicTools {
                     throw new RuntimeException("An error occurred while finding Full Houses. Are you sure the given grid was solvable?");
                 }
 
-                modifiedGrid = modifiedGrid.setCell(emptyCell, missingValues.getFirst());
+                modifiedGrid = modifiedGrid.setCellValue(emptyCell, missingValues.getFirst());
             }
         }
         return modifiedGrid;
@@ -72,7 +61,7 @@ public class HeuristicTools {
 
             ArrayList<Integer> missingValues = IntegerArrayTools.complement(union, grid.size);
             if(missingValues.size() == 1){
-                modifiedGrid = modifiedGrid.setCell(emptyCell, missingValues.getFirst());
+                modifiedGrid = modifiedGrid.setCellValue(emptyCell, missingValues.getFirst());
             }
         }
         return modifiedGrid;
@@ -107,7 +96,7 @@ public class HeuristicTools {
                         Cell cell = set.get(cellIndexInSet);
                         if(getCellCandidates(grid, cell).contains(value)){
                             // this cell contains the hidden single, set it to that value
-                            modifiedGrid = modifiedGrid.setCell(cell, value);
+                            modifiedGrid = modifiedGrid.setCellValue(cell, value);
                         }
                     }
                 }
@@ -135,18 +124,23 @@ public class HeuristicTools {
         return modifiedGrid;
     }
 
-    public static Grid logCellCandidates(Grid grid){
-        ArrayList<Cell> oldCells = grid.cells();
-        ArrayList<Cell> newCells = new ArrayList<>();
-        for(int cellIndex = 0; cellIndex < grid.cells().size(); cellIndex++){
-            Cell oldCell = oldCells.get(cellIndex);
-            Cell newCell = new Cell(oldCell.value, oldCell.row, oldCell.column, oldCell.block);
-
-            if(oldCells.get(cellIndex).value == 0){
-                newCell.cellCandidates = getCellCandidates(grid, oldCell);
-            }
-            newCells.add(newCell);
+    private static ArrayList<Integer> getCellCandidates(Grid grid, Cell cell){
+        if (cell.value == 0){
+            ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, cell);
+            ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
+            return IntegerArrayTools.complement(union, grid.size);
+        } else{
+            return new ArrayList<>();
         }
-        return new Grid(newCells, true);
+    }
+
+    public static Grid logAllCellCandidates(Grid grid){
+        Grid modifiedGrid = grid;
+        for(Cell cell:grid.cells()){
+            Cell updatedCell = new Cell(cell.value, cell.row, cell.column, cell.block);
+            updatedCell.cellCandidates = getCellCandidates(modifiedGrid, cell);
+            modifiedGrid = modifiedGrid.setCell(modifiedGrid, updatedCell);
+        }
+        return modifiedGrid;
     }
 }

@@ -128,7 +128,7 @@ public class Grid {
         return blocks;
     }
 
-    public Grid setCell(Cell cell, int newValue){
+    public Grid setCellValue(Cell cell, int newValue){
         ArrayList<ArrayList<Cell>> oldRows = rows();
         ArrayList<Cell> oldRow = oldRows.get(cell.row);
         ArrayList<Integer> values = CellTools.toIntegerRow(oldRow);
@@ -158,6 +158,21 @@ public class Grid {
             }
         }
         return new Grid(newRows);
+    }
+
+    public Grid setCell(Grid grid, Cell newCell){
+        ArrayList<Cell> oldCells = grid.cells();
+        ArrayList<Cell> newCells = new ArrayList<>();
+
+        for(int cellIndex = 0; cellIndex < grid.cells().size(); cellIndex++){
+            Cell cell = oldCells.get(cellIndex);
+
+            if(cell.row == newCell.row && cell.column == newCell.column){
+                cell = newCell;
+            }
+            newCells.add(cell);
+        }
+        return new Grid(newCells, true);
     }
 
     @Override
