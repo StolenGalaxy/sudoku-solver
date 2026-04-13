@@ -11,15 +11,39 @@ public class Grid {
     public int size;
     public int blockSize;
 
-    public Grid(ArrayList<ArrayList<Cell>> rows){
-        this.rows = rows;
-        this.size = rows.size();
+    public Grid(ArrayList<ArrayList<Cell>> localRows){
+        this.rows = localRows;
+        this.size = localRows.size();
         double lengthRoot = Math.sqrt(this.size);
         if(lengthRoot % 1 != 0){
             throw new RuntimeException("Grid size is invalid");
         } else {
             this.blockSize = (int) lengthRoot;
         }
+    }
+
+    public Grid(ArrayList<Cell> cells, boolean passCellsNotRows){
+        double sizeRoot = Math.sqrt(cells.size());
+        double lengthRoot = Math.sqrt(sizeRoot);
+
+        if(lengthRoot % 1 != 0){
+            throw new RuntimeException("Grid size is invalid");
+        } else {
+            this.size = (int) sizeRoot;
+            this.blockSize = (int) lengthRoot;
+        }
+
+        ArrayList<ArrayList<Cell>> localRows = new ArrayList<>();
+
+        while (localRows.size() < this.size){
+            ArrayList<Cell> row = new ArrayList<>();
+            while(row.size() < this.size){
+                row.add(cells.getFirst());
+                cells.removeFirst();
+            }
+            localRows.add(row);
+        }
+        this.rows = localRows;
     }
 
     public ArrayList<ArrayList<Cell>> columns(){
