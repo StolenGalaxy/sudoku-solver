@@ -16,9 +16,14 @@ public class Main {
         System.out.println("\nHeuristics applied, successfully solving " + (initialEmptyCells - postHeuristicEmptyCells) + " empty cells:\n" + modifiedGrid);
 
         if(postHeuristicEmptyCells > 0){
-            System.out.println("\nStarting DFS. There are " + postHeuristicEmptyCells + " empty cells remaining.");
+            System.out.println("\nStarting MRV Recursion. There are " + postHeuristicEmptyCells + " empty cells remaining.");
             modifiedGrid = DFS.complete(modifiedGrid);
-            System.out.println("\nDFS applied, successfully solving " + (postHeuristicEmptyCells) + " empty cells:\n" + modifiedGrid);
+
+            if(modifiedGrid == null){
+                throw new RuntimeException("MRV Recursion failed. Are you sure the initial grid was solvable?");
+            }
+
+            System.out.println("\nMRV Recursion applied, successfully solving " + (postHeuristicEmptyCells) + " empty cells:\n" + modifiedGrid);
         }
         System.out.println("Solving complete!");
     }

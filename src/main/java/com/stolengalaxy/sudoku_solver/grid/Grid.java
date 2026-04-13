@@ -140,6 +140,7 @@ public class Grid {
 
             newCell.column = columnIndex;
             newCell.row = cell.row;
+            newCell.cellCandidates = cell.cellCandidates;
 
             if(columnIndex != cell.column){
                 newCell.value = oldRow.get(columnIndex).value;
