@@ -134,4 +134,19 @@ public class HeuristicTools {
         }
         return modifiedGrid;
     }
+
+    public static Grid logCellCandidates(Grid grid){
+        ArrayList<Cell> oldCells = grid.cells();
+        ArrayList<Cell> newCells = new ArrayList<>();
+        for(int cellIndex = 0; cellIndex < grid.cells().size(); cellIndex++){
+            Cell oldCell = oldCells.get(cellIndex);
+            Cell newCell = new Cell(oldCell.value, oldCell.row, oldCell.column, oldCell.block);
+
+            if(oldCells.get(cellIndex).value == 0){
+                newCell.cellCandidates = getCellCandidates(grid, oldCell);
+            }
+            newCells.add(newCell);
+        }
+        return new Grid(newCells, true);
+    }
 }
