@@ -28,31 +28,34 @@ public class Validation {
     }
 
     public static boolean isGridValid(Grid grid){
-        boolean stillValid = true;
+        // ensure all empty cells have at least one possible value
+        for(Cell cell:grid.emptyCells()){
+            if(cell.cellCandidates.isEmpty()){
+                return false;
+            }
+        }
 
         for(ArrayList<Cell> row:grid.rows()){
             if(!isSetValid(row, grid.validValues())){
-                stillValid = false;
-                break;
+                return false;
             }
         }
         for(ArrayList<Cell> column:grid.columns()){
             if(!isSetValid(column, grid.validValues())){
-                stillValid = false;
-                break;
+                return false;
             }
         }
         for(ArrayList<Cell> block:grid.blocks()){
             if(!isSetValid(block, grid.validValues())){
-                stillValid = false;
-                break;
+                return false;
             }
         }
-        return stillValid;
+
+        return true;
     }
 
-    public static boolean isGridDone(Grid grid){
+    public static boolean isGridFull(Grid grid){
         ArrayList<Integer> values = CellTools.toIntegerRow(grid.cells());
-        return !values.contains(0) && isGridValid(grid);
+        return !values.contains(0);
     }
 }
