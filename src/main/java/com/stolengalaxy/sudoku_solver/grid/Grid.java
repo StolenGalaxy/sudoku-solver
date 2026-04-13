@@ -11,15 +11,39 @@ public class Grid {
     public int size;
     public int blockSize;
 
-    public Grid(ArrayList<ArrayList<Cell>> rows){
-        this.rows = rows;
-        this.size = rows.size();
+    public Grid(ArrayList<ArrayList<Cell>> localRows){
+        this.rows = localRows;
+        this.size = localRows.size();
         double lengthRoot = Math.sqrt(this.size);
         if(lengthRoot % 1 != 0){
             throw new RuntimeException("Grid size is invalid");
         } else {
             this.blockSize = (int) lengthRoot;
         }
+    }
+
+    public Grid(ArrayList<Cell> cells, boolean passCellsNotRows){
+        double sizeRoot = Math.sqrt(cells.size());
+        double lengthRoot = Math.sqrt(sizeRoot);
+
+        if(lengthRoot % 1 != 0){
+            throw new RuntimeException("Grid size is invalid");
+        } else {
+            this.size = (int) sizeRoot;
+            this.blockSize = (int) lengthRoot;
+        }
+
+        ArrayList<ArrayList<Cell>> localRows = new ArrayList<>();
+
+        while (localRows.size() < this.size){
+            ArrayList<Cell> row = new ArrayList<>();
+            while(row.size() < this.size){
+                row.add(cells.getFirst());
+                cells.removeFirst();
+            }
+            localRows.add(row);
+        }
+        this.rows = localRows;
     }
 
     public ArrayList<ArrayList<Cell>> columns(){
@@ -104,7 +128,7 @@ public class Grid {
         return blocks;
     }
 
-    public Grid setCell(Cell cell, int newValue){
+    public Grid setCellValue(Cell cell, int newValue){
         ArrayList<ArrayList<Cell>> oldRows = rows();
         ArrayList<Cell> oldRow = oldRows.get(cell.row);
         ArrayList<Integer> values = CellTools.toIntegerRow(oldRow);
@@ -116,6 +140,7 @@ public class Grid {
 
             newCell.column = columnIndex;
             newCell.row = cell.row;
+            newCell.cellCandidates = cell.cellCandidates;
 
             if(columnIndex != cell.column){
                 newCell.value = oldRow.get(columnIndex).value;
@@ -134,6 +159,21 @@ public class Grid {
             }
         }
         return new Grid(newRows);
+    }
+
+    public Grid setCell(Grid grid, Cell newCell){
+        ArrayList<Cell> oldCells = grid.cells();
+        ArrayList<Cell> newCells = new ArrayList<>();
+
+        for(int cellIndex = 0; cellIndex < grid.cells().size(); cellIndex++){
+            Cell cell = oldCells.get(cellIndex);
+
+            if(cell.row == newCell.row && cell.column == newCell.column){
+                cell = newCell;
+            }
+            newCells.add(cell);
+        }
+        return new Grid(newCells, true);
     }
 
     @Override

@@ -2,22 +2,31 @@ package com.stolengalaxy.sudoku_solver.solver;
 
 import com.stolengalaxy.sudoku_solver.cell.Cell;
 import com.stolengalaxy.sudoku_solver.cell.CellTools;
-import com.stolengalaxy.sudoku_solver.grid.Generator;
 import com.stolengalaxy.sudoku_solver.grid.Grid;
 import com.stolengalaxy.sudoku_solver.util.IntegerArrayTools;
 
 import java.util.ArrayList;
 
-public class Heuristics {
-    private static ArrayList<Integer> getCellCandidates(Grid grid, Cell cell){
+public class HeuristicTools {
+    public static Cell getMRVCell(Grid grid){
+        ArrayList<Cell> cells = grid.cells();
 
-        if (cell.value == 0){
-            ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, cell);
-            ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
-            return IntegerArrayTools.complement(union, grid.size);
-        } else{
-            return new ArrayList<>();
+        // not just using values from the first cell as it may not be empty
+        Cell MRVCell = new Cell(0);
+        int minimumRemainingValues = (int) Math.pow(grid.size, 2) + 1;
+
+        for(Cell cell:cells){
+            if(cell.value != 0){
+                continue;
+            }
+            int remainingValues = cell.cellCandidates.size();
+
+            if(remainingValues < minimumRemainingValues){
+                minimumRemainingValues = remainingValues;
+                MRVCell = cell;
+            }
         }
+        return MRVCell;
     }
 
     private static Grid fillFullHouses(Grid grid){
@@ -37,7 +46,7 @@ public class Heuristics {
                     throw new RuntimeException("An error occurred while finding Full Houses. Are you sure the given grid was solvable?");
                 }
 
-                modifiedGrid = modifiedGrid.setCell(emptyCell, missingValues.getFirst());
+                modifiedGrid = modifiedGrid.setCellValue(emptyCell, missingValues.getFirst());
             }
         }
         return modifiedGrid;
@@ -52,7 +61,7 @@ public class Heuristics {
 
             ArrayList<Integer> missingValues = IntegerArrayTools.complement(union, grid.size);
             if(missingValues.size() == 1){
-                modifiedGrid = modifiedGrid.setCell(emptyCell, missingValues.getFirst());
+                modifiedGrid = modifiedGrid.setCellValue(emptyCell, missingValues.getFirst());
             }
         }
         return modifiedGrid;
@@ -87,7 +96,7 @@ public class Heuristics {
                         Cell cell = set.get(cellIndexInSet);
                         if(getCellCandidates(grid, cell).contains(value)){
                             // this cell contains the hidden single, set it to that value
-                            modifiedGrid = modifiedGrid.setCell(cell, value);
+                            modifiedGrid = modifiedGrid.setCellValue(cell, value);
                         }
                     }
                 }
@@ -96,7 +105,7 @@ public class Heuristics {
         return modifiedGrid;
     }
 
-    public static Grid applyHeuristics(Grid grid){
+    private static Grid applyHeuristics(Grid grid){
         Grid modifiedGrid = fillHiddenSingles(grid);
         modifiedGrid = fillNakedSingles(modifiedGrid);
         modifiedGrid = fillFullHouses(modifiedGrid);
@@ -111,6 +120,26 @@ public class Heuristics {
         while(!modifiedGrid.equals(oldGrid)){
             oldGrid = modifiedGrid;
             modifiedGrid = applyHeuristics(oldGrid);
+        }
+        return modifiedGrid;
+    }
+
+    private static ArrayList<Integer> getCellCandidates(Grid grid, Cell cell){
+        if (cell.value == 0){
+            ArrayList<ArrayList<Integer>> rowColumnAndBlock = CellTools.getRowColumnAndBlockAsIntegers(grid, cell);
+            ArrayList<Integer> union = IntegerArrayTools.union(rowColumnAndBlock);
+            return IntegerArrayTools.complement(union, grid.size);
+        } else{
+            return new ArrayList<>();
+        }
+    }
+
+    public static Grid logAllCellCandidates(Grid grid){
+        Grid modifiedGrid = grid;
+        for(Cell cell:grid.cells()){
+            Cell updatedCell = new Cell(cell.value, cell.row, cell.column, cell.block);
+            updatedCell.cellCandidates = getCellCandidates(modifiedGrid, cell);
+            modifiedGrid = modifiedGrid.setCell(modifiedGrid, updatedCell);
         }
         return modifiedGrid;
     }
